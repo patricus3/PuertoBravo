@@ -2990,6 +2990,32 @@ class Servidor(Bots, Trafico, Peatones, Policia):
             self._enviar(o, {"t": "paga_mision", "titulo": mi["titulo"], "n": parte, "de": j.nombre})
 
     # ============================================================ administrar
+    # El nombre inglés de cada orden. Valen las dos formas en cualquier servidor, esté en el idioma que esté: quien lo
+    # administra escribe las órdenes como prefiera, en la consola, en el panel o en el chat.
+    ORDENES_EN = {"help": "ayuda", "status": "estado", "players": "jugadores", "accounts": "cuentas", "announce": "aviso",
+                  "tell": "decir", "kick": "expulsar", "ban": "vetar", "unban": "perdonar", "unadmin": "quitaradmin",
+                  "deleteaccount": "borrarcuenta", "invite": "invitar", "invites": "invitaciones", "revoke": "anular",
+                  "motd": "mensaje", "time": "hora", "gangs": "bandas", "save": "guardar", "backup": "copia", "backups": "copias",
+                  "reload": "recargar", "update": "actualizar", "restart": "reiniciar", "maintenance": "mantenimiento",
+                  "shutdown": "apagar", "stop": "apagar"}
+    _EN_DE = {}
+    for _en, _es in ORDENES_EN.items():
+        _EN_DE.setdefault(_es, _en)                             # el primero es el que sale en la ayuda (shutdown, no stop)
+    del _en, _es
+
+    @classmethod
+    def _con_ingles(cls, linea):
+        """Cómo sale una orden en la ayuda. En español, con su nombre inglés al lado: «expulsar nombre (kick)». En
+        cualquier otro idioma, solo el inglés, «kick name»: el nombre español sigue valiendo, pero no hace falta leerlo."""
+        orden, _, resto = linea.partition(" ")
+        en = cls._EN_DE.get(orden)
+        if not en:
+            return linea
+        from .idioma import actual
+        if actual() == "es":
+            return "%s (%s)" % (linea, en)
+        return en + ((" " + resto) if resto else "")
+
     AYUDA_ORDENES = (
         ("ayuda", tr("dice todas las órdenes")),
         ("estado", tr("cómo está el servidor: puerto, cifrado, mundo, tiempo en marcha y cuánta gente hay")),
@@ -3079,6 +3105,7 @@ class Servidor(Bots, Trafico, Peatones, Policia):
         if not partes:
             return ""
         que, resto = partes[0].lower(), (partes[1].strip() if len(partes) > 1 else "")
+        que = self.ORDENES_EN.get(que, que)                     # español o inglés, en cualquier servidor: help, kick, ban...
         dentro = [j for j in self.jugadores.values() if j.dentro and not j.bot]
 
         def buscar(nombre):
@@ -3087,8 +3114,9 @@ class Servidor(Bots, Trafico, Peatones, Policia):
             self.log(tr("%s da la orden %s.") % (quien, que))
         if que in ("ayuda", "?"):
             if quien != "consola":                              # por el chat, corto: se oye, no se lee
-                return tr("Órdenes: ") + ", ".join(o for o, _ in self.AYUDA_ORDENES) + "."
-            return tr("Órdenes:") + "\n" + "\n".join("  %s: %s." % o for o in self.AYUDA_ORDENES)
+                return tr("Órdenes: ") + ", ".join(self._con_ingles(o) for o, _ in self.AYUDA_ORDENES) + "."
+            return (tr("Órdenes (cada una vale en español o en inglés, en cualquier servidor):") + "\n"
+                    + "\n".join("  %s: %s." % (self._con_ingles(o), a) for o, a in self.AYUDA_ORDENES))
         if que == "estado":
             r = self.resumen()
             tope = r["max_jugadores"]
@@ -3112,7 +3140,7 @@ class Servidor(Bots, Trafico, Peatones, Policia):
             nombre, _, dicho = resto.partition(":")
             j = buscar(nombre.strip())
             if j is None or not dicho.strip():
-                return tr("Escribe decir, el nombre de alguien que esté dentro, dos puntos y el mensaje.")
+                return tr("Escribe decir (o tell), el nombre de alguien que esté dentro, dos puntos y el mensaje.")
             self._aviso(j, es("Quien administra el servidor te dice: %s") % dicho.strip()[:300], "notificacion")
             return tr("Dicho a %s.") % j.nombre
         if que in ("expulsar", "vetar") and resto:
@@ -3193,7 +3221,7 @@ class Servidor(Bots, Trafico, Peatones, Policia):
         if que == "invitaciones":
             inv = self.lista_invitaciones()
             if not inv:
-                return tr("No hay ninguna invitación. Se crean con la orden invitar.")
+                return tr("No hay ninguna invitación. Se crean con la orden invitar (o invite).")
             return "; ".join("%s, %s" % (i["codigo"], (tr("usada por %s") % (i["por"] or tr("una cuenta que ya no existe"))) if i["usada"] else tr("libre"))
                              for i in inv) + "."
         if que == "anular" and resto:
@@ -3255,5 +3283,5 @@ class Servidor(Bots, Trafico, Peatones, Policia):
             return tr("Apagando.")
         uso = next((o for o in self.AYUDA_ORDENES if o[0].split()[0] == que), None)
         if uso is not None:                                    # la orden existe, pero le falta el nombre, el texto o el número
-            return tr("A esa orden le falta algo. Se escribe así: %s. Sirve para esto: %s.") % uso
-        return tr("No conozco esa orden. Escribe ayuda.")
+            return tr("A esa orden le falta algo. Se escribe así: %s. Sirve para esto: %s.") % (self._con_ingles(uso[0]), uso[1])
+        return tr("No conozco esa orden. Escribe ayuda o help.")

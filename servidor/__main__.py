@@ -10,7 +10,9 @@
     python -m servidor --reiniciar          lo mismo, diciendo que es por mantenimiento
     python -m servidor --puerto=47821       cualquier opción se puede dar también así, sin tocar el archivo
 
-Mientras funciona, se le pueden escribir órdenes: ayuda las dice todas.
+Las banderas valen también en inglés: --example, --check, --options, --stop, --update, --restart.
+
+Mientras funciona, se le pueden escribir órdenes, en español o en inglés: ayuda (o help) las dice todas.
 """
 from .idioma import tr
 import asyncio
@@ -83,8 +85,13 @@ def _vigilar_cierre_de_consola(parar, parado):
         return None
 
 
+# Las banderas valen también en inglés, como las órdenes de la consola.
+BANDERAS_EN = {"--example": "--ejemplo", "--check": "--comprobar", "--options": "--opciones", "--stop": "--parar",
+               "--update": "--actualizar", "--restart": "--reiniciar"}
+
+
 def main(args=None):
-    args = list(sys.argv[1:] if args is None else args)
+    args = [BANDERAS_EN.get(a.lower(), a) for a in (sys.argv[1:] if args is None else args)]
     ruta = next((a for a in args if not a.startswith("--")), "servidor.conf")
     if "--ejemplo" in args:
         if os.path.exists(ruta):
@@ -150,7 +157,7 @@ def main(args=None):
     srv.log((tr("Caben %d jugadores a la vez.") % tope) if tope > 0 else tr("Caben todos los jugadores que entren: no hay límite."))
     if srv.huella_cert:
         srv.log(tr("Huella del certificado: %s") % srv.huella_cert)
-    srv.log(tr("Escribe ayuda para ver las órdenes."))
+    srv.log(tr("Escribe ayuda o help para ver las órdenes: valen en español y en inglés."))
 
     def consola():
         try:
