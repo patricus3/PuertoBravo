@@ -562,7 +562,8 @@ def _estilo_piloto(cfg):
         cfg["piloto_estilo"] = ESTILOS_PILOTO[(i + d) % len(ESTILOS_PILOTO)]
     return Opcion(lambda: tr('Cómo conduce el piloto: {estilo}').format(estilo=nombre_estilo(cfg["piloto_estilo"])), ajuste=aj,
                   ayuda=tr("Automático corre solo cuando hace falta; Tranquilo va despacio; Normal cumple las normas siempre; Con prisa pero cumpliendo las normas "
-                           "acelera a fondo sin que lo multen; y Con prisa saltándose las normas no espera en los semáforos. Se elige también al volante con un toque de la A."))
+                           "acelera a fondo sin que lo multen; Con prisa saltándose las normas va al noventa por ciento de lo que da el vehículo y no espera en los semáforos; "
+                           "y Con muchísima prisa va a toda velocidad. Se elige también al volante con un toque de la A."))
 
 
 def opciones(app):

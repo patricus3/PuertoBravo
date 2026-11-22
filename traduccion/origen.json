@@ -2748,6 +2748,9 @@
 "A ti no te daba ni la hora.": [
 "juego/respuestas_datos1.py"
 ],
+"A toda la velocidad que da el vehículo y sin esperar en los semáforos. Con tan poco margen para frenar, choca más a menudo. Si te ve la policía, multas y puntos del carné.": [
+"juego/conduccion.py"
+],
 "A toda velocidad; más despacio, menos.": [
 "editor/esquema_vuelo.py"
 ],
@@ -3670,6 +3673,9 @@
 ],
 "Al moverte por un menú, después de cada opción dice cuál es y cuántas hay.": [
 "juego/menus_juego.py"
+],
+"Al noventa por ciento de lo que da el vehículo y sin esperar en los semáforos. Si te ve la policía, te costará multas y puntos del carné.": [
+"juego/conduccion.py"
 ],
 "Al pararse, el servidor pide a cada juego que guarde su personaje y espera hasta estos segundos a que llegue. Si todos guardan antes, no espera más.": [
 "servidor/opciones.py"
@@ -5272,7 +5278,7 @@
 "Automático": [
 "juego/conduccion.py"
 ],
-"Automático corre solo cuando hace falta; Tranquilo va despacio; Normal cumple las normas siempre; Con prisa pero cumpliendo las normas acelera a fondo sin que lo multen; y Con prisa saltándose las normas no espera en los semáforos. Se elige también al volante con un toque de la A.": [
+"Automático corre solo cuando hace falta; Tranquilo va despacio; Normal cumple las normas siempre; Con prisa pero cumpliendo las normas acelera a fondo sin que lo multen; Con prisa saltándose las normas va al noventa por ciento de lo que da el vehículo y no espera en los semáforos; y Con muchísima prisa va a toda velocidad. Se elige también al volante con un toque de la A.": [
 "juego/menus_juego.py"
 ],
 "Automático, el más barato que funcione": [
@@ -9710,6 +9716,9 @@
 ],
 "Con mucho valor, se te encara si le insultas y grita pidiendo ayuda si le amenazas; con poco, huye o suelta el dinero.": [
 "editor/esquema.py"
+],
+"Con muchísima prisa, a toda velocidad": [
+"juego/conduccion.py"
 ],
 "Con más nivel aciertas más a menudo.": [
 "juego/menus_vida.py"
@@ -27117,9 +27126,6 @@
 "Lo más rápido que hay. No lleva fuego, así que no se quema.": [
 "juego/compra.py",
 "data/datos/vida.json"
-],
-"Lo más rápido que puede y sin esperar en los semáforos. Si te ve la policía, te costará multas y puntos del carné.": [
-"juego/conduccion.py"
 ],
 "Lo mínimo que acepta el gestor, en euros": [
 "editor/esquema.py"
@@ -52238,7 +52244,7 @@
 "localidades": [
 "juego/trabajos.py"
 ],
-"los ajustes del piloto del GPS: activarlo y cómo conduce, Automático, Tranquilo, Normal cumpliendo las normas, Con prisa pero cumpliendo las normas, o Con prisa saltándose las normas": [
+"los ajustes del piloto del GPS: activarlo y cómo conduce, Automático, Tranquilo, Normal cumpliendo las normas, Con prisa pero cumpliendo las normas, Con prisa saltándose las normas, o Con muchísima prisa, a toda velocidad": [
 "juego/ayuda.py"
 ],
 "los aseos": [

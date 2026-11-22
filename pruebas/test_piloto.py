@@ -221,9 +221,9 @@ def test_cada_estilo_del_piloto_corre_lo_suyo_y_con_prisa_legal_no_lo_multan(rob
     destino = max(p.mundo.lugares.values(), key=lambda l: math.hypot(l.x - v.x, l.y - v.y))
     p.gps_a_lugar(destino, callar=True)
     p._piloto_semaforo = lambda *a: None                            # sin semáforos: solo cuenta la velocidad que busca
-    for estilo in ("tranquilo", "normal", "prisa_legal", "prisa"):
+    for estilo in ("tranquilo", "normal", "prisa_legal", "prisa", "muy_prisa"):
         p.cfg["piloto_estilo"] = estilo
-        v.vel = 30.0                                                 # por encima de todas: con un frenazo enorme se queda en la suya
+        v.vel = v.modelo["vel_max"] + 5.0                            # por encima de todas: con un frenazo enorme se queda en la suya
         p._pilotar(v, 1.0, 100.0)
         tope = v.vel
         if estilo == "tranquilo":
@@ -232,6 +232,8 @@ def test_cada_estilo_del_piloto_corre_lo_suyo_y_con_prisa_legal_no_lo_multan(rob
             assert tope <= aj("limite_ciudad") / 3.6 + 0.01
         elif estilo == "prisa_legal":
             assert aj("limite_ciudad") / 3.6 < tope < multa
+        elif estilo == "prisa":
+            assert abs(tope - v.modelo["vel_max"] * 0.9) < 0.01      # sin el tope de ciudad de antes
         else:
-            assert tope > multa
+            assert abs(tope - v.modelo["vel_max"]) < 0.01            # a toda velocidad
     del p._piloto_semaforo

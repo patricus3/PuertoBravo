@@ -19,13 +19,14 @@ LOCALES_CON_MUSICA = ("tienda", "comida", "pizzeria", "bar", "taberna", "ropa", 
 
 # Cómo conduce el piloto del GPS (opción «piloto_estilo»): se elige con un toque de la A al volante. Mantener la A sigue
 # siendo cambiar al carril contrario; un toque corto, de menos de A_TOQUE milisegundos, abre el menú.
-ESTILOS_PILOTO = ("auto", "tranquilo", "normal", "prisa_legal", "prisa")
+ESTILOS_PILOTO = ("auto", "tranquilo", "normal", "prisa_legal", "prisa", "muy_prisa")
 A_TOQUE = 350
 
 
 def nombre_estilo(e):
     return {"auto": tr("Automático"), "tranquilo": tr("Tranquilo"), "normal": tr("Normal, cumpliendo las normas"),
-            "prisa_legal": tr("Con prisa, pero cumpliendo las normas"), "prisa": tr("Con prisa, saltándose las normas")}.get(e, e)
+            "prisa_legal": tr("Con prisa, pero cumpliendo las normas"), "prisa": tr("Con prisa, saltándose las normas"),
+            "muy_prisa": tr("Con muchísima prisa, a toda velocidad")}.get(e, e)
 
 
 def ayuda_estilo(e):
@@ -33,7 +34,8 @@ def ayuda_estilo(e):
             "tranquilo": tr("Despacio y con suavidad: acelera poco, frena pronto y para en todos los semáforos. Nunca tiene prisa."),
             "normal": tr("A velocidad de ciudad, sin pasar del límite, y espera en todos los semáforos, aunque vayas contra el reloj."),
             "prisa_legal": tr("Acelera a fondo y va un poco por encima del límite, pero sin llegar a lo que se multa; para en rojo, aunque no frena si el semáforo solo está a punto de cambiar."),
-            "prisa": tr("Lo más rápido que puede y sin esperar en los semáforos. Si te ve la policía, te costará multas y puntos del carné.")}.get(e, "")
+            "prisa": tr("Al noventa por ciento de lo que da el vehículo y sin esperar en los semáforos. Si te ve la policía, te costará multas y puntos del carné."),
+            "muy_prisa": tr("A toda la velocidad que da el vehículo y sin esperar en los semáforos. Con tan poco margen para frenar, choca más a menudo. Si te ve la policía, multas y puntos del carné.")}.get(e, "")
 
 
 class Conduccion:
@@ -670,7 +672,9 @@ class Conduccion:
             salta, acel, apurar = False, 1.0, True
             objetivo = min(mo["vel_max"] * 0.85, limite * (1.0 + aj("margen_velocidad") / 200.0))
         elif estilo == "prisa":
-            salta, objetivo, acel, apurar = True, min(mo["vel_max"] * 0.85, 21.0), 1.0, True
+            salta, objetivo, acel, apurar = True, mo["vel_max"] * 0.9, 1.0, True        # lo que da el vehículo, sin tope de ciudad
+        elif estilo == "muy_prisa":
+            salta, objetivo, acel, apurar = True, mo["vel_max"], 1.0, True              # a fondo: la frenada automática sigue mirando delante
         else:
             salta = bool(self.sirena_propia) or bool(self.mision and self.mision.get("limite") is not None)
             prisa = salta or bool(self.trabajo and self.trabajo.get("limite") is not None)
