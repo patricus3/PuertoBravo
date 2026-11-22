@@ -436,8 +436,10 @@ def test_diez_y_el_dinero_gastar_ganar_el_tope_por_hora_transferir_y_dar_cosas(t
         assert saldo(g[7]) == 500 and not sacar(g[7], "saldo") and banco.hacer(lambda: J(banco, g[7]).dinero) == 300
         assert not [l for l in banco.lineas[marca:] if "no se le reconocen" in l]
         # y dos cobros seguidos, con el juego enterándose del primero cuando el servidor ya ha hecho el segundo
-        g[7].est(di=300 + 2000)
+        # el crédito, antes de la posición que trae el dinero: la posición va por la red y el crédito por dentro, y si la
+        # posición llegaba primero, el servidor veía 2000 euros sin justificar y los quitaba (la prueba fallaba a veces)
         banco.hacer(lambda: setattr(J(banco, g[7]), "credito", 2000))
+        g[7].est(di=300 + 2000)
         sinc(g[7])
         g[7].enviar({"t": "banda_ingresar", "n": 600})
         g[7].enviar({"t": "banda_ingresar", "n": 400})

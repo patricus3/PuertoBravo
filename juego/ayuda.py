@@ -77,6 +77,8 @@ TECLAS = {
         (tr("Flechas izquierda y derecha"), tr("en conducción asistida ponen el intermitente: el coche girará solo en el próximo cruce. En conducción libre giran el volante")),
         (tr("A y D"), tr("en conducción asistida, mantenlas para cambiar de carril: A invade el carril contrario para adelantar y D te arrima a la acera. "
                   "Pilotando un helicóptero o una avioneta, con el vuelo real, la D sube y la A baja")),
+        (tr("Un toque de la A"), tr("los ajustes del piloto del GPS: activarlo y cómo conduce, Automático, Tranquilo, Normal cumpliendo las normas, "
+                  "Con prisa pero cumpliendo las normas, Con prisa saltándose las normas, o Con muchísima prisa, a toda velocidad")),
         (tr("Frenada automática"), tr("en conducción asistida el coche frena solo si hay un vehículo delante en tu carril. Se desactiva en Opciones")),
         ("U", tr("media vuelta, con el coche casi parado. Con el piloto del GPS, la da él solo cuando el destino queda a tu espalda")),
         ("Y", tr("piloto del GPS: el coche va solo hasta el destino marcado; acelera, frena, gira, espera en los semáforos y se detiene al llegar")),

@@ -140,13 +140,16 @@ def test_lo_que_dice_el_servidor_a_los_jugadores_no_cambia(tmp_path):
                                      "Volverá en unos minutos: vuelve a entrar entonces.")
     assert srv.orden("aviso Mañana hay quedada") == "Aviso enviado." and enviados[-1]["texto"] == "Aviso del servidor: Mañana hay quedada"
     assert srv.orden("mensaje Hoy, carreras") .startswith("Mensaje del día cambiado") and enviados[-1]["texto"] == "Mensaje del día: Hoy, carreras"
-    assert srv.orden("hora") == "A esa orden le falta algo. Se escribe así: hora número. Sirve para esto: pone la hora del juego, de 0 a 23."
-    assert srv.orden("chiribita") == "No conozco esa orden. Escribe ayuda."
+    assert srv.orden("hora") == "A esa orden le falta algo. Se escribe así: hora número (time). Sirve para esto: pone la hora del juego, de 0 a 23."
+    assert srv.orden("chiribita") == "No conozco esa orden. Escribe ayuda o help."
+    # las órdenes valen en español y en inglés, en cualquier servidor
+    assert srv.orden("time") == srv.orden("hora") and srv.orden("KICK Nadie") == srv.orden("expulsar Nadie") == "No hay nadie con ese nombre."
+    assert srv.orden("help") == srv.orden("ayuda") and srv.orden("gangs") == "No hay bandas." and srv.orden("players") == "No hay nadie."
     assert srv.orden("expulsar Nadie: pesado") == "No hay nadie con ese nombre."
     assert srv.orden("bandas") == "No hay bandas." and srv.orden("jugadores") == "No hay nadie."
     srv.t_inicio = time.time() - (86400 + 2 * 3600 + 60 + 5)
     assert srv._tiempo_en_marcha() == "1 día, 2 horas, 1 minuto"
-    assert srv.orden("ayuda", "Alguien").startswith("Órdenes: ayuda, estado, jugadores") and srv.orden("ayuda").startswith("Órdenes:\n  ayuda: ")
+    assert srv.orden("ayuda", "Alguien").startswith("Órdenes: ayuda (help), estado (status), jugadores (players)") and srv.orden("ayuda").startswith("Órdenes (cada una vale en español o en inglés, en cualquier servidor):\n  ayuda (help): ")
 
 
 # ------------------------------------------------------------------ el juego

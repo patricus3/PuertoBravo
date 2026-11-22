@@ -266,7 +266,11 @@
   "calle": [
     {"id": "general",
      "reaccion_cada": 8,
-     "grito_prob": 50,
+     "grito_prob": 85,
+     "panico_prob": 75,
+     "panico_cada": 2.6,
+     "panico_max": 3,
+     "panico_vol": 45,
      "frases_huye": ["{quien} sale corriendo.", "{quien} grita y echa a correr.", "{quien} huye calle abajo.", "{quien} se asusta y corre."],
      "frases_huyen": ["{n} personas salen corriendo.", "La gente huye: {n} personas echan a correr.", "{n} personas gritan y se dispersan."],
      "frases_aparta": ["{quien} se aparta de un salto.", "{quien} se quita de en medio.", "{quien} se echa a un lado."],

@@ -523,7 +523,11 @@ ESQUEMAS = {
     "ajuste_calle": {"titulo": tr("La calle: reacciones, policía y helicóptero"), "resumen": lambda d: tr('{get} patrullas de ronda; reacciones de la gente, botín, ambulancias, rendición y helicóptero').format(get=(d.get('patrullas', 2))), "campos": [
         c("id", tr("Identificador"), req=True, defecto="general", ayuda=tr("Déjalo en general: solo se usa el primero.")),
         c("reaccion_cada", tr("Segundos entre dos frases de gente que huye"), "entero", tr("El juego no dice una frase de reacción antes de que pase este tiempo desde la anterior. Los gritos se oyen siempre."), minimo=1, maximo=120, defecto=8),
-        c("grito_prob", tr("De cada cien que huyen, cuántos gritan"), "entero", minimo=0, maximo=100, defecto=50),
+        c("grito_prob", tr("De cada cien que huyen, cuántos gritan"), "entero", minimo=0, maximo=100, defecto=85),
+        c("panico_prob", tr("De cada cien veces, cuántas se oye chillar a quien sigue huyendo"), "entero", tr("Mientras huye, cada pocos segundos puede volver a chillar, para que no se quede en un solo grito. A cero, solo se oye el grito del susto."), minimo=0, maximo=100, defecto=75),
+        c("panico_cada", tr("Segundos, de media, entre dos chillidos de quien huye"), "decimal", minimo=0.5, maximo=30, defecto=2.6),
+        c("panico_max", tr("Cuántos chillidos de pánico se oyen a la vez como mucho"), "entero", tr("Para que una multitud corriendo no lo tape todo."), minimo=1, maximo=12, defecto=3),
+        c("panico_vol", tr("Volumen de los chillidos de pánico, de cero a cien"), "entero", minimo=1, maximo=100, defecto=45),
         c("frases_huye", tr("Lo que se dice cuando huye una persona"), "textos", tr("Una frase por línea. Donde pongas {quien} irá «Un hombre», «Una mujer» o su nombre, si ya te lo ha dicho.")),
         c("frases_huyen", tr("Lo que se dice cuando huyen varias"), "textos", tr("Una por línea. Donde pongas {n} irá cuántas son.")),
         c("frases_aparta", tr("Lo que se dice cuando alguien se aparta del claxon"), "textos", tr("Una por línea, con {quien}.")),

@@ -26,6 +26,7 @@ POR_DEFECTO = {
     "anunciar_barrios": True,
     "anunciar_superficie": False,
     "piloto_gps": False,
+    "piloto_estilo": "auto",       # auto | tranquilo | normal | prisa_legal | prisa | muy_prisa (la A al volante)
     "frenada_auto": True,
     "sucesos": True,
     "servidores": [],              # servidores en línea guardados: nombre, dirección y huella de su certificado
@@ -123,6 +124,7 @@ POR_DEFECTO = {
 OPCIONES = {
     "movimiento": ["brujula", "giro"],
     "conduccion": ["asistida", "libre"],
+    "piloto_estilo": ["auto", "tranquilo", "normal", "prisa_legal", "prisa", "muy_prisa"],
     "punteria": ["completa", "manual"],
     "dificultad": ["facil", "normal", "dificil"],
     "direcciones": ["cardinal", "reloj", "relativa"],

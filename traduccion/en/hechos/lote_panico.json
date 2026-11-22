@@ -1,0 +1,8 @@
+{
+"Cuántos chillidos de pánico se oyen a la vez como mucho": "Maximum number of panic screams heard at once",
+"De cada cien veces, cuántas se oye chillar a quien sigue huyendo": "Out of a hundred times, how often someone still fleeing is heard screaming",
+"Mientras huye, cada pocos segundos puede volver a chillar, para que no se quede en un solo grito. A cero, solo se oye el grito del susto.": "While fleeing, every few seconds they may scream again, so it isn't just a single scream. At zero, only the scream when they get scared is heard.",
+"Para que una multitud corriendo no lo tape todo.": "So a running crowd doesn't drown out everything else.",
+"Segundos, de media, entre dos chillidos de quien huye": "Average seconds between two screams from someone fleeing",
+"Volumen de los chillidos de pánico, de cero a cien": "Volume of panic screams, from zero to a hundred"
+}

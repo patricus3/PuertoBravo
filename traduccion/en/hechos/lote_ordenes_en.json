@@ -1,0 +1,7 @@
+{
+"Escribe ayuda o help para ver las órdenes: valen en español y en inglés.": "Type help to see the commands.",
+"Escribe decir (o tell), el nombre de alguien que esté dentro, dos puntos y el mensaje.": "Type tell, the name of someone who is online, a colon and the message.",
+"No conozco esa orden. Escribe ayuda o help.": "I don't know that command. Type help.",
+"No hay ninguna invitación. Se crean con la orden invitar (o invite).": "There are no invitations. Create them with the invite command.",
+"Órdenes (cada una vale en español o en inglés, en cualquier servidor):": "Commands:"
+}
