@@ -17,6 +17,24 @@ NIVEL_HILO = 0.3
 LOCALES_CON_MUSICA = ("tienda", "comida", "pizzeria", "bar", "taberna", "ropa", "gimnasio", "club", "casino", "taller", "concesionario",
                       "feria", "empenos", "nautica", "armeria")
 
+# Cómo conduce el piloto del GPS (opción «piloto_estilo»): se elige con un toque de la A al volante. Mantener la A sigue
+# siendo cambiar al carril contrario; un toque corto, de menos de A_TOQUE milisegundos, abre el menú.
+ESTILOS_PILOTO = ("auto", "tranquilo", "normal", "prisa_legal", "prisa")
+A_TOQUE = 350
+
+
+def nombre_estilo(e):
+    return {"auto": tr("Automático"), "tranquilo": tr("Tranquilo"), "normal": tr("Normal, cumpliendo las normas"),
+            "prisa_legal": tr("Con prisa, pero cumpliendo las normas"), "prisa": tr("Con prisa, saltándose las normas")}.get(e, e)
+
+
+def ayuda_estilo(e):
+    return {"auto": tr("Va a velocidad de ciudad y corre más solo cuando hace falta: con la sirena o en una misión contra el reloj, que además no espera en los semáforos; en un trabajo contra el reloj corre más, pero espera en rojo."),
+            "tranquilo": tr("Despacio y con suavidad: acelera poco, frena pronto y para en todos los semáforos. Nunca tiene prisa."),
+            "normal": tr("A velocidad de ciudad, sin pasar del límite, y espera en todos los semáforos, aunque vayas contra el reloj."),
+            "prisa_legal": tr("Acelera a fondo y va un poco por encima del límite, pero sin llegar a lo que se multa; para en rojo, aunque no frena si el semáforo solo está a punto de cambiar."),
+            "prisa": tr("Lo más rápido que puede y sin esperar en los semáforos. Si te ve la policía, te costará multas y puntos del carné.")}.get(e, "")
+
 
 class Conduccion:
     # ------------------------------------------------------------- utilidades
@@ -559,21 +577,63 @@ class Conduccion:
             self.alternar_trabajo()
         elif k == pygame.K_w:
             self.decir(tr('{int} kilómetros por hora.').format(int=(int(abs(v.vel) * 3.6))), True)
+        elif k == pygame.K_a and not mayus and not (v.modelo.get("vuela") and self.vuelo_real()):
+            self._a_pulsada = pygame.time.get_ticks()           # un toque corto abre los ajustes del piloto (lo mira conducir)
         elif k == pygame.K_y:
-            self.cfg["piloto_gps"] = not self.cfg["piloto_gps"]
-            if not self.cfg["piloto_gps"]:
-                self.decir(tr("Piloto del GPS desactivado."), True)
-            elif v.modelo.get("barco") or self.mundo.tipo == "mar":
-                self.decir(tr("Piloto del GPS activado, pero en el agua no conduce: solo en tierra."), True)
-            elif v.modelo.get("vuela"):
-                self.decir(tr("Piloto del GPS activado para cuando conduzcas en tierra. En el aire no lleva los mandos")
-                           + (tr(": para eso está el piloto automático del vuelo.") if self.vuelo_real() else "."), True)
-            elif not self.modo_asistido():
-                self.decir(tr("Piloto del GPS activado, pero solo funciona en conducción asistida. Cámbiala en Opciones, Movimiento y conducción."), True)
-            elif not self.gps:
-                self.decir(tr("Piloto del GPS activado. Marca un destino en el GPS y el coche irá solo: acelera, frena, gira y para en los semáforos."), True)
-            else:
-                self.decir(tr('Piloto del GPS activado: el coche va solo hasta {nombre}. Con cualquier flecha o el espacio mandas tú.').format(nombre=(self.gps['nombre'])), True)
+            self.alternar_piloto()
+
+    def alternar_piloto(self):
+        """Activa o desactiva el piloto del GPS y dice por qué no arranca, si no puede."""
+        v = self.j.veh
+        if v is None:
+            return
+        self.cfg["piloto_gps"] = not self.cfg["piloto_gps"]
+        if not self.cfg["piloto_gps"]:
+            self.decir(tr("Piloto del GPS desactivado."), True)
+        elif v.modelo.get("barco") or self.mundo.tipo == "mar":
+            self.decir(tr("Piloto del GPS activado, pero en el agua no conduce: solo en tierra."), True)
+        elif v.modelo.get("vuela"):
+            self.decir(tr("Piloto del GPS activado para cuando conduzcas en tierra. En el aire no lleva los mandos")
+                       + (tr(": para eso está el piloto automático del vuelo.") if self.vuelo_real() else "."), True)
+        elif not self.modo_asistido():
+            self.decir(tr("Piloto del GPS activado, pero solo funciona en conducción asistida. Cámbiala en Opciones, Movimiento y conducción."), True)
+        elif not self.gps:
+            self.decir(tr("Piloto del GPS activado. Marca un destino en el GPS y el coche irá solo: acelera, frena, gira y para en los semáforos."), True)
+        else:
+            self.decir(tr('Piloto del GPS activado: el coche va solo hasta {nombre}. Con cualquier flecha o el espacio mandas tú.').format(nombre=(self.gps['nombre'])), True)
+
+    def _mirar_toque_a(self):
+        """Un toque corto de la A al volante (pulsar y soltar enseguida) abre los ajustes del piloto. Mantenerla sigue
+        siendo cambiar al carril contrario, así que el menú se abre al soltarla, no al pulsarla."""
+        t0 = getattr(self, "_a_pulsada", None)
+        if t0 is None or pygame.K_a in self.app.teclas:
+            return
+        self._a_pulsada = None
+        if pygame.time.get_ticks() - t0 < A_TOQUE:
+            self.menu_piloto()
+
+    def menu_piloto(self):
+        """Los ajustes del piloto del GPS: activarlo y cómo conduce."""
+        from .menus import Menu, Opcion
+
+        def elegir(e):
+            self.cfg["piloto_estilo"] = e
+            self._piloto_prisa = False
+            self.app.cerrar(menu)
+            self.decir(tr('Piloto: {estilo}. {ayuda}').format(estilo=nombre_estilo(e), ayuda=ayuda_estilo(e)), True)
+
+        def opciones():
+            ops = [Opcion(lambda: tr("Piloto del GPS: activado") if self.cfg["piloto_gps"] else tr("Piloto del GPS: desactivado"),
+                          self.alternar_piloto, ayuda=tr("Intro lo activa o lo desactiva, como la Y al volante."), callado=True)]
+            for e in ESTILOS_PILOTO:
+                ops.append(Opcion(lambda e=e: nombre_estilo(e) + (tr(", elegido") if self.cfg["piloto_estilo"] == e else ""),
+                                  lambda e=e: elegir(e), ayuda=ayuda_estilo(e)))
+            return ops
+
+        menu = Menu(self.app, tr("Ajustes del piloto del GPS"), opciones,
+                    intro=tr('Ahora conduce así: {estilo}').format(estilo=nombre_estilo(self.cfg["piloto_estilo"])))
+        menu.i = 1 + ESTILOS_PILOTO.index(self.cfg["piloto_estilo"]) if self.cfg["piloto_estilo"] in ESTILOS_PILOTO else 0
+        self.app.abrir(menu)
 
     def piloto_puesto(self):
         """El piloto del GPS está activado, o conduce tu chófer, que usa el mismo piloto."""
@@ -595,13 +655,29 @@ class Conduccion:
         # Con prisa (la sirena puesta, o una misión o un trabajo contra el reloj) el piloto corre más. Solo se salta los
         # semáforos con la sirena o en una misión: en un trabajo (el autobús, el taxi, el reparto) te costaría multas y
         # puntos del carné, así que espera en rojo como cualquiera, aunque vaya más deprisa.
-        salta = bool(self.sirena_propia) or bool(self.mision and self.mision.get("limite") is not None)
-        prisa = salta or bool(self.trabajo and self.trabajo.get("limite") is not None)
-        objetivo = min(mo["vel_max"] * 0.85, 21.0) if prisa else min(mo["vel_max"] * 0.6, 14.0)
+        # El estilo elegido con la A manda sobre todo eso; con «Automático», lo de siempre.
+        from .realismo import aj
+        estilo = self.cfg["piloto_estilo"]
+        limite = aj("limite_ciudad") / 3.6
+        acel = 0.8                                               # cuánto pisa el acelerador, sobre lo que da el vehículo
+        apurar = False                                           # pasa los semáforos que están a punto de cambiar
         quien = self.chofer["nombre"].split(",")[0] if self.chofer_conduce() else tr("El piloto")
-        if prisa and not getattr(self, "_piloto_prisa", False):
-            self.decir(tr('Vas con prisa: {v} corre más').format(v=(tr('el piloto') if quien in ('El piloto', tr('El piloto')) else quien)) + (tr(" y no espera en los semáforos.") if salta else tr(", pero espera en los semáforos.")))
-        self._piloto_prisa = prisa
+        if estilo == "tranquilo":
+            salta, objetivo, acel = False, min(mo["vel_max"] * 0.45, 8.5), 0.45
+        elif estilo == "normal":
+            salta, objetivo = False, min(mo["vel_max"] * 0.6, 14.0, limite)
+        elif estilo == "prisa_legal":                            # por encima del límite, pero sin llegar a lo que se multa
+            salta, acel, apurar = False, 1.0, True
+            objetivo = min(mo["vel_max"] * 0.85, limite * (1.0 + aj("margen_velocidad") / 200.0))
+        elif estilo == "prisa":
+            salta, objetivo, acel, apurar = True, min(mo["vel_max"] * 0.85, 21.0), 1.0, True
+        else:
+            salta = bool(self.sirena_propia) or bool(self.mision and self.mision.get("limite") is not None)
+            prisa = salta or bool(self.trabajo and self.trabajo.get("limite") is not None)
+            objetivo = min(mo["vel_max"] * 0.85, 21.0) if prisa else min(mo["vel_max"] * 0.6, 14.0)
+            if prisa and not getattr(self, "_piloto_prisa", False):
+                self.decir(tr('Vas con prisa: {v} corre más').format(v=(tr('el piloto') if quien in ('El piloto', tr('El piloto')) else quien)) + (tr(" y no espera en los semáforos.") if salta else tr(", pero espera en los semáforos.")))
+            self._piloto_prisa = prisa
         ruta = self.gps.get("ruta") or []
         if ruta and self.modo_asistido():                        # el destino ha quedado atrás (te has pasado, o el que persigues ha girado): media vuelta
             px, py = ruta[0]
@@ -634,7 +710,7 @@ class Conduccion:
                         self.decir(tr('El piloto se detiene: has llegado a {nombre}.').format(nombre=(self.gps['nombre'])))
             else:
                 self._piloto_parado = False
-        hasta_linea = None if salta else self._piloto_semaforo(v, freno)
+        hasta_linea = None if salta else self._piloto_semaforo(v, freno, apurar)
         if hasta_linea is not None:
             # frena para quedarse en la línea, sea cual sea el vehículo: un autobús frena peor que un turismo y antes se metía en el cruce
             objetivo = min(objetivo, math.sqrt(2.0 * max(1.0, freno * 0.8) * max(0.0, hasta_linea - 0.6)))
@@ -644,7 +720,7 @@ class Conduccion:
                 self.t_aviso_rojo = self.t
                 self.decir(tr('Semáforo en rojo. {quien} espera.').format(quien=(quien)))
         if v.vel < objetivo:
-            v.vel = min(objetivo, v.vel + mo["acel"] * 0.8 * dt)
+            v.vel = min(objetivo, v.vel + mo["acel"] * acel * dt)
         elif v.vel > objetivo:
             v.vel = max(objetivo, v.vel - freno * dt)
 
@@ -653,6 +729,7 @@ class Conduccion:
         j = self.j
         v = j.veh
         t = self.app.teclas
+        self._mirar_toque_a()                           # un toque de la A: los ajustes del piloto
         if self.chofer_conduce():                       # conduce tu chófer: los pedales y el volante son suyos
             t = frozenset()
         mo = v.modelo
@@ -922,7 +999,7 @@ class Conduccion:
                 return True
         return False
 
-    def _piloto_semaforo(self, v, freno):
+    def _piloto_semaforo(self, v, freno, apurar=False):
         """El piloto ante el próximo cruce: los metros hasta la línea de parada si tiene que parar, o None si puede pasar.
         Para si está en rojo, y también si se pondrá en rojo antes de cruzarlo y le da para frenar (en el juego no hay
         ámbar). Mira tan lejos como haga falta para frenar a tiempo con lo que frena ese vehículo."""
@@ -946,8 +1023,8 @@ class Conduccion:
             verde = not m.verde_vertical(idx, m._idx(v.y, m.NY), self.t)
         if not verde:
             return max(0.0, linea) if linea > 0.5 or vel < 3 else None      # ya en la línea y lanzado: mejor despejar el cruce
-        if vel < 1 or linea <= parar + 1.0:
-            return None                                          # verde y sin sitio para parar con suavidad: pasa
+        if vel < 1 or linea <= parar + 1.0 or apurar:
+            return None                                          # verde y sin sitio para parar con suavidad (o con prisa): pasa
         falta = 14.0 - ((self.t + getattr(m, "desfase_luces", 0.0)) % 14.0)
         if (d + 9.0) / vel > falta:                              # se pondrá en rojo antes de cruzarlo: se queda
             return linea

@@ -1,0 +1,21 @@
+{
+"Automático": "Automatic",
+"Tranquilo": "Calm",
+"Normal, cumpliendo las normas": "Normal, obeying the rules",
+"Con prisa, pero cumpliendo las normas": "Hurried, but obeying the rules",
+"Con prisa, saltándose las normas": "Hurried, breaking the rules",
+"Va a velocidad de ciudad y corre más solo cuando hace falta: con la sirena o en una misión contra el reloj, que además no espera en los semáforos; en un trabajo contra el reloj corre más, pero espera en rojo.": "Drives at city speed and only goes faster when needed: with the siren on or in a mission against the clock, when it also doesn't wait at traffic lights; in a job against the clock it goes faster, but waits at red lights.",
+"Despacio y con suavidad: acelera poco, frena pronto y para en todos los semáforos. Nunca tiene prisa.": "Slow and smooth: it accelerates gently, brakes early and stops at every traffic light. It's never in a hurry.",
+"A velocidad de ciudad, sin pasar del límite, y espera en todos los semáforos, aunque vayas contra el reloj.": "At city speed, never over the limit, and it waits at every traffic light, even when you're against the clock.",
+"Acelera a fondo y va un poco por encima del límite, pero sin llegar a lo que se multa; para en rojo, aunque no frena si el semáforo solo está a punto de cambiar.": "It floors it and goes a little over the limit, but never enough to get a ticket; it stops at red lights, but doesn't brake when a light is only about to change.",
+"Lo más rápido que puede y sin esperar en los semáforos. Si te ve la policía, te costará multas y puntos del carné.": "As fast as it can, without waiting at traffic lights. If the police see you, it will cost you fines and license points.",
+"Piloto: {estilo}. {ayuda}": "Autopilot: {estilo}. {ayuda}",
+"Piloto del GPS: activado": "GPS autopilot: on",
+"Piloto del GPS: desactivado": "GPS autopilot: off",
+"Intro lo activa o lo desactiva, como la Y al volante.": "Enter turns it on or off, like Y at the wheel.",
+", elegido": ", selected",
+"Ajustes del piloto del GPS": "GPS autopilot settings",
+"Ahora conduce así: {estilo}": "Current driving style: {estilo}",
+"Cómo conduce el piloto: {estilo}": "Autopilot driving style: {estilo}",
+"Automático corre solo cuando hace falta; Tranquilo va despacio; Normal cumple las normas siempre; Con prisa pero cumpliendo las normas acelera a fondo sin que lo multen; y Con prisa saltándose las normas no espera en los semáforos. Se elige también al volante con un toque de la A.": "Automatic only hurries when needed; Calm drives slowly; Normal always obeys the rules; Hurried but obeying the rules floors it without getting ticketed; and Hurried, breaking the rules doesn't wait at traffic lights. You can also choose it at the wheel with a quick tap of A."
+}

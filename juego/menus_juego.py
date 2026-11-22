@@ -552,6 +552,19 @@ def volumen_sonidos(app):
 
 
 # ======================================================================= opciones
+def _estilo_piloto(cfg):
+    """Cómo conduce el piloto del GPS, que también se elige al volante con un toque de la A."""
+    from .conduccion import ESTILOS_PILOTO, nombre_estilo
+
+    def aj(d):
+        e = cfg["piloto_estilo"]
+        i = ESTILOS_PILOTO.index(e) if e in ESTILOS_PILOTO else 0
+        cfg["piloto_estilo"] = ESTILOS_PILOTO[(i + d) % len(ESTILOS_PILOTO)]
+    return Opcion(lambda: tr('Cómo conduce el piloto: {estilo}').format(estilo=nombre_estilo(cfg["piloto_estilo"])), ajuste=aj,
+                  ayuda=tr("Automático corre solo cuando hace falta; Tranquilo va despacio; Normal cumple las normas siempre; Con prisa pero cumpliendo las normas "
+                           "acelera a fondo sin que lo multen; y Con prisa saltándose las normas no espera en los semáforos. Se elige también al volante con un toque de la A."))
+
+
 def opciones(app):
     """Opciones organizadas por secciones. Cada sección termina con «Volver»."""
     cfg = app.cfg
@@ -734,6 +747,7 @@ def opciones(app):
             si_no("piloto_gps", tr("Piloto del GPS, el coche va solo hasta el destino"),
                   tr("Con un destino marcado en el GPS y en conducción asistida, el coche conduce solo: acelera, frena, gira, espera en los semáforos y se detiene al llegar. "
                   "Con cualquier flecha o el espacio mandas tú. Se activa también con la tecla Y al volante.")),
+            _estilo_piloto(cfg),
             si_no("sonar", tr("Sensor de proximidad al volante"), tr("Al volante, pita cuando tienes un obstáculo cerca: más agudo cuanto más cerca, y por el lado en que está. Al activarlo se oye una muestra."),
                   al_cambiar=lambda: cfg["sonar"] and app.mez.sonar("sonar", cat="interfaz", vol=0.6)),
         ], tr("Cómo caminas y cómo conduces.")),

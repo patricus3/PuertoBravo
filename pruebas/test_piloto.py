@@ -182,3 +182,56 @@ def test_acerca_de(robot, monkeypatch):
         assert trozo in abiertos[-1]
     robot.tecla(pygame.K_ESCAPE)
     assert app.pila[-1] is principal
+
+
+def test_un_toque_de_la_a_abre_los_ajustes_del_piloto_y_mantenerla_cambia_de_carril(robot):
+    """La A al volante: un toque corto abre el menú de cómo conduce el piloto; mantenida, sigue siendo adelantar."""
+    p = robot.nueva_partida()
+    p.cfg["conduccion"] = "asistida"
+    p.cfg["sucesos"] = False
+    p.cfg["piloto_estilo"] = "auto"
+    _al_volante(robot)
+    robot.frames(5)
+    robot.tecla(pygame.K_a)                                          # pulsar y soltar enseguida
+    robot.frames(1)
+    menu = robot.app.pila[-1]
+    assert isinstance(menu, Menu) and "piloto" in menu.titulo.lower(), menu
+    # la primera es activar o desactivar el piloto; el cursor empieza en el estilo puesto
+    assert menu.i == 1
+    robot.tecla(pygame.K_DOWN)
+    robot.tecla(pygame.K_DOWN)
+    robot.tecla(pygame.K_DOWN)                                       # auto -> tranquilo -> normal -> prisa_legal
+    robot.tecla(pygame.K_RETURN)
+    assert p.cfg["piloto_estilo"] == "prisa_legal" and robot.app.pila[-1] is p
+    # mantenida más que un toque, no abre nada
+    p._a_pulsada = pygame.time.get_ticks() - 2000
+    robot.frames(2)
+    assert robot.app.pila[-1] is p
+
+
+def test_cada_estilo_del_piloto_corre_lo_suyo_y_con_prisa_legal_no_lo_multan(robot):
+    from juego.realismo import aj
+    p = robot.nueva_partida()
+    p.cfg["conduccion"] = "asistida"
+    p.cfg["sucesos"] = False
+    p.cfg["piloto_gps"] = True
+    v = _al_volante(robot)
+    robot.frames(10)
+    multa = aj("limite_ciudad") * (1.0 + aj("margen_velocidad") / 100.0) / 3.6
+    destino = max(p.mundo.lugares.values(), key=lambda l: math.hypot(l.x - v.x, l.y - v.y))
+    p.gps_a_lugar(destino, callar=True)
+    p._piloto_semaforo = lambda *a: None                            # sin semáforos: solo cuenta la velocidad que busca
+    for estilo in ("tranquilo", "normal", "prisa_legal", "prisa"):
+        p.cfg["piloto_estilo"] = estilo
+        v.vel = 30.0                                                 # por encima de todas: con un frenazo enorme se queda en la suya
+        p._pilotar(v, 1.0, 100.0)
+        tope = v.vel
+        if estilo == "tranquilo":
+            assert tope <= 8.6
+        elif estilo == "normal":
+            assert tope <= aj("limite_ciudad") / 3.6 + 0.01
+        elif estilo == "prisa_legal":
+            assert aj("limite_ciudad") / 3.6 < tope < multa
+        else:
+            assert tope > multa
+    del p._piloto_semaforo
