@@ -1872,6 +1872,9 @@
 ", el doble por hacer siete y media.": [
 "juego/sistemas.py"
 ],
+", elegido": [
+"juego/conduccion.py"
+],
 ", en el puerto {puerto}.": [
 "juego/online.py"
 ],
@@ -2761,6 +2764,9 @@
 "A tus negocios les han robado {total} euros de la caja. Se te descuentan {v}.": [
 "juego/enlinea.py"
 ],
+"A velocidad de ciudad, sin pasar del límite, y espera en todos los semáforos, aunque vayas contra el reloj.": [
+"juego/conduccion.py"
+],
 "A ver si arreglan de una vez el reloj de la plaza.": [
 "data/datos/gente.json"
 ],
@@ -3092,6 +3098,9 @@
 ],
 "Aceite, frenos y ruedas. Si le toca y no la pasas, los frenos van perdiendo. Arregla también un pinchazo.": [
 "juego/menus_juego.py"
+],
+"Acelera a fondo y va un poco por encima del límite, pero sin llegar a lo que se multa; para en rojo, aunque no frena si el semáforo solo está a punto de cambiar.": [
+"juego/conduccion.py"
 ],
 "Acelera como un rayo, pero no te protege de nada.": [
 "data/datos/vehiculos.json"
@@ -3436,6 +3445,9 @@
 "Ah... vale.": [
 "juego/respuestas.py"
 ],
+"Ahora conduce así: {estilo}": [
+"juego/conduccion.py"
+],
 "Ahora es tuyo: {nombre}. Está amarrado en {nombre_lugar}.": [
 "juego/misiones.py"
 ],
@@ -3544,6 +3556,9 @@
 ],
 "Ajuste de cuentas": [
 "data/datos/misiones_extra2.json"
+],
+"Ajustes del piloto del GPS": [
+"juego/conduccion.py"
 ],
 "Ajá.": [
 "juego/respuestas.py"
@@ -5253,6 +5268,12 @@
 ],
 "Automática: dispara mientras se mantiene pulsado": [
 "editor/esquema.py"
+],
+"Automático": [
+"juego/conduccion.py"
+],
+"Automático corre solo cuando hace falta; Tranquilo va despacio; Normal cumple las normas siempre; Con prisa pero cumpliendo las normas acelera a fondo sin que lo multen; y Con prisa saltándose las normas no espera en los semáforos. Se elige también al volante con un toque de la A.": [
+"juego/menus_juego.py"
 ],
 "Automático, el más barato que funcione": [
 "juego/ia.py"
@@ -9747,6 +9768,12 @@
 "Con precios bajos, lo que sube el nombre cada día": [
 "editor/esquema_honrado.py"
 ],
+"Con prisa, pero cumpliendo las normas": [
+"juego/conduccion.py"
+],
+"Con prisa, saltándose las normas": [
+"juego/conduccion.py"
+],
 "Con prisa, sin pensar": [
 "juego/laboratorio.py"
 ],
@@ -11133,6 +11160,9 @@
 "Cuántos caben en el vehículo": [
 "editor/esquema.py"
 ],
+"Cuántos chillidos de pánico se oyen a la vez como mucho": [
+"editor/esquema.py"
+],
 "Cuántos coches lleva el servidor, como mucho, por cada zona de una localidad en la que hay jugadores. Para unos amigos que van juntos es el total de coches de la localidad.": [
 "servidor/opciones.py"
 ],
@@ -11233,6 +11263,9 @@
 "juego/menus_juego.py"
 ],
 "Cómo cobras tus negocios: {cobro_txt}": [
+"juego/menus_juego.py"
+],
+"Cómo conduce el piloto: {estilo}": [
 "juego/menus_juego.py"
 ],
 "Cómo contestan las personas de la calle cuando les escribes lo que quieres: con el motor del juego o con una inteligencia artificial.": [
@@ -11758,6 +11791,9 @@
 "editor/esquema.py"
 ],
 "De cada cien veces, cuántas desaparece el gestor con el dinero": [
+"editor/esquema.py"
+],
+"De cada cien veces, cuántas se oye chillar a quien sigue huyendo": [
 "editor/esquema.py"
 ],
 "De cada clase se lleva uno solo: gafas, cadena, anillo, reloj, gorra, pendiente, bolso, cinturón, pulsera, bufanda, corbata, perfume, piercing o la que tú inventes. Comprar otro de la misma clase sustituye al que se llevaba, y el anterior sigue siendo tuyo.": [
@@ -12647,6 +12683,9 @@
 "Desodorante": [
 "juego/compra.py",
 "data/datos/vida.json"
+],
+"Despacio y con suavidad: acelera poco, frena pronto y para en todos los semáforos. Nunca tiene prisa.": [
+"juego/conduccion.py"
 ],
 "Despacio. Diez mil litros no frenan, se paran cuando ellos quieren.": [
 "data/mods/bahia_del_ocaso.json"
@@ -18491,7 +18530,7 @@
 "Escribe antes una orden. La orden ayuda las dice todas.": [
 "panel_servidor/ventana.py"
 ],
-"Escribe ayuda para ver las órdenes.": [
+"Escribe ayuda o help para ver las órdenes: valen en español y en inglés.": [
 "servidor/__main__.py"
 ],
 "Escribe con tus palabras: cómo te ha ido, una pregunta, un cumplido, lo que quieras. ": [
@@ -18500,7 +18539,7 @@
 "Escribe con tus palabras: saludar, preguntar por un sitio, contar algo, hacer un cumplido. ": [
 "juego/menus_charla.py"
 ],
-"Escribe decir, el nombre de alguien que esté dentro, dos puntos y el mensaje.": [
+"Escribe decir (o tell), el nombre de alguien que esté dentro, dos puntos y el mensaje.": [
 "servidor/nucleo.py"
 ],
 "Escribe el número que quieres jugar y pulsa Intro. Si tiene menos de cinco cifras, se completa con ceros delante.": [
@@ -23519,6 +23558,9 @@
 "Intro la copia al portapapeles.": [
 "juego/menus_online.py"
 ],
+"Intro lo activa o lo desactiva, como la Y al volante.": [
+"juego/conduccion.py"
+],
 "Intro lo contrata o lo da de baja. Cubre a todos tus vehículos de tierra desde el día siguiente a contratarlo, no a las aeronaves. Cada medianoche cobra {seguro_cuota} euros por cada vehículo tuyo en la calle, del bolsillo o del banco; los del garaje no pagan. Si uno explota, al día siguiente te lo devuelven reparado y con sus mejoras, en un garaje tuyo con sitio o a la puerta de un taller, pagando una franquicia: el {seguro_franquicia_pct} por ciento de lo que cuesta el modelo, y como poco {seguro_franquicia_min} euros.": [
 "juego/misvehiculos.py"
 ],
@@ -27076,6 +27118,9 @@
 "juego/compra.py",
 "data/datos/vida.json"
 ],
+"Lo más rápido que puede y sin esperar en los semáforos. Si te ve la policía, te costará multas y puntos del carné.": [
+"juego/conduccion.py"
+],
 "Lo mínimo que acepta el gestor, en euros": [
 "editor/esquema.py"
 ],
@@ -29811,6 +29856,9 @@
 "Mientras haya salud, lo demás se arregla.": [
 "juego/respuestas_datos1.py"
 ],
+"Mientras huye, cada pocos segundos puede volver a chillar, para que no se quede en un solo grito. A cero, solo se oye el grito del susto.": [
+"editor/esquema.py"
+],
 "Mientras le pagues, lo que se sepa de tu otra vida hace la mitad de daño, frena a la prensa y puede recurrir las sanciones de una inspección. Se renueva solo cada semana; Intro otra vez lo despide.": [
 "juego/menus_honrado.py"
 ],
@@ -31368,7 +31416,7 @@
 "No conduzco... me da cosa.": [
 "juego/respuestas_datos1.py"
 ],
-"No conozco esa orden. Escribe ayuda.": [
+"No conozco esa orden. Escribe ayuda o help.": [
 "servidor/nucleo.py"
 ],
 "No creo.": [
@@ -31662,7 +31710,7 @@
 "No hay ninguna invitación. Crea una con Control+I.": [
 "panel_servidor/ventana.py"
 ],
-"No hay ninguna invitación. Se crean con la orden invitar.": [
+"No hay ninguna invitación. Se crean con la orden invitar (o invite).": [
 "servidor/nucleo.py"
 ],
 "No hay ninguna otra localidad con helipuerto ni aeropuerto": [
@@ -32900,6 +32948,9 @@
 "Noria del Paseo": [
 "data/mods/bahia_del_ocaso.json"
 ],
+"Normal, cumpliendo las normas": [
+"juego/conduccion.py"
+],
 "Normal.": [
 "juego/respuestas_datos1.py",
 "juego/respuestas_datos1.py"
@@ -34016,6 +34067,9 @@
 "editor/esquema.py"
 ],
 "Para que no abran todos a la vez. Con cero, todos los del mismo tipo igual.": [
+"editor/esquema.py"
+],
+"Para que una multitud corriendo no lo tape todo.": [
 "editor/esquema.py"
 ],
 "Para quedar, abre la ficha de alguien de tu vida social en el móvil.": [
@@ -35145,6 +35199,15 @@
 ],
 "Piloto del GPS, el coche va solo hasta el destino": [
 "juego/menus_juego.py"
+],
+"Piloto del GPS: activado": [
+"juego/conduccion.py"
+],
+"Piloto del GPS: desactivado": [
+"juego/conduccion.py"
+],
+"Piloto: {estilo}. {ayuda}": [
+"juego/conduccion.py"
 ],
 "Pimientos": [
 "juego/compra.py",
@@ -39834,6 +39897,9 @@
 "Segundos, como poco, entre dos giros cantados": [
 "editor/esquema.py"
 ],
+"Segundos, de media, entre dos chillidos de quien huye": [
+"editor/esquema.py"
+],
 "Seguridad Búho": [
 "data/mods/noches_de_neon.json"
 ],
@@ -43755,6 +43821,9 @@
 "juego/vuelo.py",
 "data/datos/vida.json"
 ],
+"Tranquilo": [
+"juego/conduccion.py"
+],
 "Tranquilo, lo que se dice tranquilo, no es. Pero es mi casa.": [
 "juego/respuestas_datos1.py"
 ],
@@ -45475,6 +45544,9 @@
 "Un todoterreno viejo de los que arrancan siempre.": [
 "data/mods/valdeolmos.json"
 ],
+"Un toque de la A": [
+"juego/ayuda.py"
+],
 "Un toque que suena desde la dirección que tienes que seguir. Al activarla se oye una muestra.": [
 "juego/menus_juego.py"
 ],
@@ -46862,6 +46934,9 @@
 "Uy, si te contara lo que me hizo ayer el pequeño...": [
 "juego/respuestas_datos1.py"
 ],
+"Va a velocidad de ciudad y corre más solo cuando hace falta: con la sirena o en una misión contra el reloj, que además no espera en los semáforos; en un trabajo contra el reloj corre más, pero espera en rojo.": [
+"juego/conduccion.py"
+],
 "Va bien, gracias. Siempre hay faena, y eso es bueno.": [
 "juego/respuestas_datos1.py"
 ],
@@ -48032,6 +48107,9 @@
 ],
 "Volumen de las señales de ayuda": [
 "juego/menus_juego.py"
+],
+"Volumen de los chillidos de pánico, de cero a cien": [
+"editor/esquema.py"
 ],
 "Volumen del ambiente": [
 "juego/menus_juego.py"
@@ -52159,6 +52237,9 @@
 ],
 "localidades": [
 "juego/trabajos.py"
+],
+"los ajustes del piloto del GPS: activarlo y cómo conduce, Automático, Tranquilo, Normal cumpliendo las normas, Con prisa pero cumpliendo las normas, o Con prisa saltándose las normas": [
+"juego/ayuda.py"
 ],
 "los aseos": [
 "juego/sistemas.py"
@@ -58396,11 +58477,11 @@
 "Échalos de allí. Y si encuentras las llaves de esa lancha, quédatela, que te la has ganado.": [
 "data/datos/misiones_extra.json"
 ],
+"Órdenes (cada una vale en español o en inglés, en cualquier servidor):": [
+"servidor/nucleo.py"
+],
 "Órdenes de administrador": [
 "juego/menus_enlinea.py"
-],
-"Órdenes:": [
-"servidor/nucleo.py"
 ],
 "Órdenes: ": [
 "servidor/nucleo.py"
