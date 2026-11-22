@@ -14,7 +14,8 @@ from . import mundo as M
 from .entidades import Objeto, Persona, Vehiculo
 
 _AJUSTES = {
-    "reaccion_cada": 8, "grito_prob": 50,
+    "reaccion_cada": 8, "grito_prob": 85,
+    "panico_prob": 75, "panico_cada": 2.6, "panico_max": 3, "panico_vol": 45,
     "charla_poco": 150, "charla_normal": 70, "charla_mucho": 30, "parejas": 20,
     "municion_prob": 70, "municion_min": 40, "municion_max": 120, "arma_prob": 35,
     "patrullas": 2, "patrullas_noche": 1, "auxilio_prob": 60,
@@ -25,7 +26,7 @@ _AJUSTES = {
     "helicoptero_dano_minimo": 40, "helicoptero_multa": 2000,
 }
 # Los que pueden valer cero: una probabilidad a cero apaga esa parte, y cero patrullas es ninguna.
-_CERO = ("grito_prob", "parejas", "municion_prob", "arma_prob", "patrullas", "patrullas_noche", "auxilio_prob", "ambulancia_prob",
+_CERO = ("grito_prob", "panico_prob", "parejas", "municion_prob", "arma_prob", "patrullas", "patrullas_noche", "auxilio_prob", "ambulancia_prob",
          "rendicion_dinero", "helicoptero_multa", "helicoptero_dano_minimo")
 _LISTAS = {
     "frases_huye": [tr("{quien} sale corriendo."), tr("{quien} grita y echa a correr."), tr("{quien} huye calle abajo."), tr("{quien} se asusta y corre.")],
@@ -347,6 +348,39 @@ class Calle:
             self.voz_persona(p, "grito")
         if not callar:
             self._reacciones.append((p, que))
+        p.t_panico = None                                        # el pánico de después empieza de nuevo (panico)
+
+    def panico(self, p, d, dt):
+        """Mientras huye, a quien se ha asustado se le sigue oyendo: chillidos y gritos sueltos cada pocos segundos, cada
+        vez con un tono distinto, para que la calle no se quede muda después del primer grito. Se oyen como mucho unos
+        pocos a la vez (panico_max), para que una multitud corriendo no tape todo lo demás."""
+        t = getattr(p, "t_panico", None)
+        if t is None:
+            p.t_panico = random.uniform(0.8, 1.8)                # el primero, después del grito del susto
+            return
+        p.t_panico = t - dt
+        if p.t_panico > 0:
+            return
+        cada = aj("panico_cada")
+        p.t_panico = random.uniform(cada * 0.6, cada * 1.5)
+        if d > 45 or random.random() >= aj("panico_prob") / 100.0:
+            return
+        sonando = [c for c in getattr(self, "_panico_canales", []) if c.activo]
+        if len(sonando) >= int(aj("panico_max")):
+            self._panico_canales = sonando
+            return
+        self._panico_canales = sonando + [self.voz_panico(p)]
+
+    def voz_panico(self, p):
+        """Un chillido de pánico. Si el pack de sonidos trae panico_hombre y panico_mujer, suenan esos; si no, el grito de
+        susto, más agudo y más bajo, con un tono distinto cada vez."""
+        mujer = genero_de(p) == "m"
+        vol = aj("panico_vol") / 100.0
+        propio = "panico_mujer" if mujer else "panico_hombre"
+        if propio in getattr(self.mez, "sonidos", {}):
+            return self.son(propio, xy=(p.x, p.y), ref=6, maxd=60, vol=vol * random.uniform(0.8, 1.0), tono=voz_tono(p) * random.uniform(0.94, 1.06))
+        return self.son("grito_mujer" if mujer else "grito_hombre", xy=(p.x, p.y), ref=5, maxd=60,
+                        vol=vol * random.uniform(0.65, 1.0), tono=voz_tono(p) * random.uniform(1.0, 1.28))
 
     def _decir_reacciones(self):
         r, self._reacciones = self._reacciones, []

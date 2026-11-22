@@ -769,6 +769,13 @@ class Combate:
                 if p.estado == "quieto" or p.bloque is None:
                     if p.estado == "huye":
                         self._andar_hacia(p, p.x + (p.x - px), p.y + (p.y - py), 4.5, dt)
+                        if p.tipo == "civil":
+                            self.panico(p, d, dt)                # se le oye: chillidos y pasos a la carrera
+                            if d < 24:
+                                p.t_paso -= dt
+                                if p.t_paso <= 0:
+                                    p.t_paso = 0.3
+                                    self.son("paso_npc", xy=(p.x, p.y), ref=3, maxd=28, vol=0.7, tono=random.uniform(0.9, 1.1))
                         p.t_estado -= dt
                         if p.t_estado <= 0:
                             p.estado = "quieto"
@@ -776,6 +783,8 @@ class Combate:
                 vel = p.vel
                 if p.estado == "huye":
                     vel = 4.6
+                    if p.tipo == "civil":
+                        self.panico(p, d, dt)
                     p.t_estado -= dt
                     p.t_voz -= dt
                     if p.t_voz <= 0:
